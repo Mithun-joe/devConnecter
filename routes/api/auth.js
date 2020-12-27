@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const {check,validationResult} = require("express-validator");
 const auth = require('../../middleware/auth');
+const bcrpyt = require('bcryptjs');
+const jwt = require("jsonwebtoken");
+const config = require("config");
 const User = require('../../models/User');
 //@route GET api/auth
 //@desc Test Route
@@ -25,7 +28,6 @@ router.get('/',auth, async (req,res)=>{
 
 router.post('/',
     [
-        check("name","Name is required").not().isEmpty(),
         check("email","please include valid Email").isEmail(),
         check("password","password is required").exists()],
     async (req,res)=>{
@@ -39,25 +41,14 @@ router.post('/',
         try{
             let user = await User.findOne({email});
             if (!user){
-                return res.status(400).json({errors:[{msg:'User Already exists'}]});
+                return res.status(400).json({errors:[{msg:'Invalid Credentials'}]});
             }
-            const avatar = gravatar.url(email,{
-                s:'200',
-                r:'pg',
-                d:'mm'
-            });
 
-            user = new User({
-                name,
-                email,
-                password,
-                avatar
-            });
+            const isMatch = await bcrpyt.compare(password,user.password);
 
-            const salt = await bcrypt.genSalt(10);
-            user.password = await bcrypt.hash(password,salt);
-
-            await user.save();
+            if(!isMatch){
+                return res.status(400).json({errors:[{msg:'Invalid Credentials'}]});
+            }
 
             const payload = {
                 user: {
