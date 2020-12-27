@@ -77,7 +77,7 @@ router.post('/',[auth,[
         if(instagram) profileFields.social.instagram = instagram;
         
         try{
-            let profile = await Profile.findOne({user:req.user.id})
+            let profile = await Profile.findOne({user:req.user.id});
             if(profile){
                 //update
                 profile = await Profile.findOneAndUpdate(
@@ -97,5 +97,45 @@ router.post('/',[auth,[
             res.status(500).send('server Error')
         }
 });
+
+//@route GET api/profile
+//@desc Get all profiles
+//@access Public
+
+router.get('/',async (req,res)=>{
+    try{
+        const profiles = await Profile.find().populate('user',['name','avatar']);
+        res.json(profiles)
+
+    }catch (err) {
+        console.log(err);
+        res.status(500).send('server error')
+    }
+});
+
+//@route GET api/profile/user/:user_id
+//@desc Get profile by user Id
+//@access Public
+
+router.get('/user/:user_id',async (req,res)=>{
+    try{
+        const profile = await Profile.findOne({user:req.params.user_id}).populate(
+            'user',
+            ['name','avatar']);
+        if(!profile){
+            return res.status(400).json({msg:'Profile not found'})
+        }
+
+        res.json(profile)
+
+    }catch (err) {
+        console.log(err);
+        if(err.kind === 'ObjectId'){
+            return res.status(400).json({msg:'Profile not found'})
+        }
+        res.status(500).send('server error')
+    }
+});
+
 
 module.exports = router;
