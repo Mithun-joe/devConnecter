@@ -1,0 +1,14 @@
+##deploying backend node app on heroku
+
+add "engines":{ "node":"version" } on package.json file
+
+npm install
+heroku local web
+git add .
+git commit -m "added a procfile or deploying on heroku"
+heroku login
+heroku create
+git remote
+git push heroku master
+
+app will be deployed
