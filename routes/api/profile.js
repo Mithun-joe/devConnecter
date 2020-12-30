@@ -12,7 +12,7 @@ const User =require('../../models/User');
 
 //@route GET api/profile/me
 //@desc Get current users profile
-//@access Public
+//@access Private
 
 router.get('/me',auth, async (req,res)=>{
 
