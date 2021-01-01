@@ -3,10 +3,11 @@ import {connect} from "react-redux";
 import {Link} from "react-router-dom";
 import PropTypes from 'prop-types'
 import {setAlert} from "../../actions/alert";
-// import axios from "axios";
+import {register} from "../../actions/auth";
+import axios from "axios";
 
 
-const Register = ({ setAlert }) =>{
+const Register = ({ setAlert,register}) =>{
 
     const [formData,setformData] = React.useState({
         name:'',
@@ -24,28 +25,28 @@ const Register = ({ setAlert }) =>{
         if(password !== password2){
             setAlert('passwords do not match','danger')
         }else{
-            console.log('success');
+            register({name,email,password});
 
-          //Important Code for User register
-            // const newUser = {
-            //     name,
-            //     email,
-            //     password
-            // };
-            //
-            // try{
-            //   const config ={
-            //       headers:{
-            //           'Content-Type':'application/json'
-            //       }
-            //   };
-            //
-            //   const body = JSON.stringify(newUser);
-            //   const res = await axios.post('/api/users',body,config);
-            //   console.log(res.data)
-            // }catch (err) {
-            //     console.error(err.response.data);
-            // }
+          // //Important Code for User register
+          //   const newUser = {
+          //       name,
+          //       email,
+          //       password
+          //   };
+          //
+          //   try{
+          //     const config ={
+          //         headers:{
+          //             'Content-Type':'application/json'
+          //         }
+          //     };
+          //
+          //     const body = JSON.stringify(newUser);
+          //     const res = await axios.post('/api/users',body,config);
+          //     console.log(res.data)
+          //   }catch (err) {
+          //       console.error(err.response.data);
+          //   }
         }
     };
 
@@ -61,7 +62,7 @@ const Register = ({ setAlert }) =>{
                         name="name"
                         value={name}
                         onChange={e => onChange(e)}
-                        required/>
+                       />
                 </div>
                 <div className="form-group">
                     <input
@@ -70,7 +71,6 @@ const Register = ({ setAlert }) =>{
                         name="email"
                         value={email}
                         onChange={e => onChange(e)}
-                        required
                     />
                     <small className="form-text"
                     >This site uses Gravatar so if you want a profile image, use a
@@ -83,7 +83,6 @@ const Register = ({ setAlert }) =>{
                         placeholder="Password"
                         name="password"
                         value={password}
-                        minLength="6"
                         onChange={e => onChange(e)}
                     />
                 </div>
@@ -93,7 +92,6 @@ const Register = ({ setAlert }) =>{
                         placeholder="Confirm Password"
                         name="password2"
                         value={password2}
-                        minLength="6"
                         onChange={e => onChange(e)}
                     />
                 </div>
@@ -107,7 +105,9 @@ const Register = ({ setAlert }) =>{
 };
 
 Register.propTypes = {
-    setAlert: PropTypes.func.isRequired
+    setAlert: PropTypes.func.isRequired,
+    register: PropTypes.func.isRequired
+
 };
 
-export default connect(null,{ setAlert })(Register);
+export default connect(null,{ setAlert, register })(Register);
