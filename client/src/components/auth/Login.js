@@ -12,8 +12,12 @@ const Login = ({login,isAuthenticated}) => {
         email:'',
         password:'',
     });
-
+    const [demoLoginData] = React.useState({
+        emailDemo: 'demouser@gmail.com',
+        passwordDemo: '123456'
+    });
     const {email,password} = formData;
+    const {emailDemo,passwordDemo} = demoLoginData;
 
     const onChange = e => setformData({...formData, [e.target.name]:e.target.value});
 
@@ -22,6 +26,10 @@ const Login = ({login,isAuthenticated}) => {
             login(email,password);
         };
 
+    const onClick = async e => {
+        e.preventDefault();
+        login(emailDemo,passwordDemo)
+    };
     //redirect if logged in
     if(isAuthenticated){
         return <Redirect to='/dashboard'/>
@@ -53,6 +61,7 @@ const Login = ({login,isAuthenticated}) => {
                     />
                 </div>
                 <input type="submit" className="btn btn-primary" value="LogIn"/>
+                <input type="submit" onClick={e=>onClick(e)} className="btn btn-primary" value="Demo login"/>
             </form>
             <p className="my-1">
                 you dont have an account? <Link to="/register">Sign up</Link>

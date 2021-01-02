@@ -24,8 +24,22 @@ const EditProfile = ({createProfile, getCurrentProfile, profile:{profile,loading
 
     useEffect(()=>{
         getCurrentProfile();
-        
-    },[])
+
+        setformData({
+            company: loading || !profile.company ? '' : profile.company,
+            website: loading || !profile.website ? '' : profile.website,
+            location: loading || !profile.location ? '' : profile.location,
+            bio: loading || !profile.bio ? '' : profile.bio,
+            status: loading || !profile.status ? '' : profile.status,
+            githubusername: loading || !profile.githubusername ? '' : profile.githubusername,
+            skills: loading || !profile.skills ? '' : profile.skills.join(','),
+            youtube: loading || !profile.social ? '' : profile.social.youtube,
+            facebook: loading || !profile.social ? '' : profile.social.facebook,
+            twitter: loading || !profile.social ? '' : profile.social.twitter,
+            instagram: loading || !profile.social ? '' : profile.social.instagram,
+            linkedin: loading || !profile.social ? '' : profile.social.linkedin,
+        })
+    },[loading]);
 
     const {
         company,
@@ -46,7 +60,7 @@ const EditProfile = ({createProfile, getCurrentProfile, profile:{profile,loading
 
     const onSubmit = (e) => {
         e.preventDefault();
-        createProfile(formData,history);
+        createProfile(formData,history,true);
 
     };
 
@@ -157,22 +171,22 @@ const EditProfile = ({createProfile, getCurrentProfile, profile:{profile,loading
 
 
                 <input type="submit" className="btn btn-primary my-1"/>
-                <a className="btn btn-light my-1" href="dashboard.html">Go Back</a>
+                <Link className="btn btn-light my-1" to="/dashboard">Go Back</Link>
             </form>
         </Fragment>
     )
 };
 
-CreateProfile.propTypes = {
+EditProfile.propTypes = {
     createProfile: PropTypes.func.isRequired,
     getCurrentProfile: PropTypes.func.isRequired,
     profile:PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    profile:state.profile,
+    profile: state.profile,
 
 });
 
 
-export default connect(mapStateToProps(),{createProfile,getCurrentProfile})(withRouter(EditProfile));
+export default connect(mapStateToProps,{createProfile,getCurrentProfile})(withRouter(EditProfile));
