@@ -20,3 +20,7 @@ export const getCurrentProfile = () => async dispatch => {
         })
     }
 };
+
+//update a profile
+
+
