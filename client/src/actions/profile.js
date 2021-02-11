@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {setAlert} from "./alert";
 import {
+    ACCOUNT_DELETED,
+    CLEAR_PROFILE,
     GET_PROFILE,
     PROFILE_ERROR,
     UPDATE_PROFILE
@@ -113,9 +115,73 @@ export const addEducation = (formData,history) => async dispatch => {
     }
 };
 
+//delete experience
+export const deleteExperience = id =>  dispatch =>{
+
+    axios.delete(`api/profile/experience/${id}`)
+        .then(res=>{
+            dispatch({
+                type:UPDATE_PROFILE,
+                payload:res.data
+            })
+        })
+        .then(()=>{
+            dispatch(setAlert('Experience Removed','success'))
+        })
+        .catch(err=>{
+            dispatch({
+                type: PROFILE_ERROR,
+                payload: {msg:err.response.statusText , error: err.response.status}
+            })
+        })
+};
 
 
+//delete education
+export const deleteEducation = id =>  dispatch =>{
 
+    axios.delete(`api/profile/education/${id}`)
+        .then(res=>{
+            dispatch({
+                type:UPDATE_PROFILE,
+                payload:res.data
+            })
+        })
+        .then(()=>{
+            dispatch(setAlert('Education Removed','success'))
+        })
+        .catch(err=>{
+            dispatch({
+                type: PROFILE_ERROR,
+                payload: {msg:err.response.statusText , error: err.response.status}
+            })
+        })
+};
+
+
+//delete Account and profile
+export const deleteAccount = () =>  dispatch =>{
+
+    if(window.confirm('Are your sure')){
+        axios.delete(`api/profile`)
+            .then(res=>{
+                dispatch({
+                    type:CLEAR_PROFILE,
+                });
+                dispatch({type:ACCOUNT_DELETED})
+            })
+            .then(()=>{
+                dispatch(setAlert('Your account has been succesfully deleted','success'))
+            })
+            .catch(err=>{
+                dispatch({
+                    type: PROFILE_ERROR,
+                    payload: {msg:err.response.statusText , error: err.response.status}
+                })
+            })
+    }
+
+};
 
 
 

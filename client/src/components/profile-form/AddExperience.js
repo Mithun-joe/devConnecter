@@ -24,7 +24,7 @@ const AddExperience = ({addExperience,history}) => {
     const onSubmit = e => {
         e.preventDefault();
         addExperience(formData,history)
-    }
+    };
 
   return (
       <Fragment>
