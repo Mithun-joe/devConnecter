@@ -5,7 +5,9 @@ import {
     CLEAR_PROFILE,
     GET_PROFILE,
     PROFILE_ERROR,
-    UPDATE_PROFILE
+    UPDATE_PROFILE,
+    GET_PROFILES,
+    GET_REPOS
 } from "./types";
 
 //Get the current users profile
@@ -22,6 +24,63 @@ export const getCurrentProfile = () => async dispatch => {
             payload: {msg : err.response.statusText,status:err.response.status}
         })
     }
+};
+
+//get all profiles
+export const getProfiles = () => dispatch =>{
+
+    dispatch({type:CLEAR_PROFILE});
+
+    axios.get('/api/profile')
+        .then(res=>{
+            dispatch({
+                type:GET_PROFILES,
+                payload:res.data
+            })
+        })
+        .catch(err=>{
+            dispatch({
+                type:PROFILE_ERROR,
+                payload: {msg:err.response.statusText,error:err.response.status}
+            })
+        })
+};
+
+//get profile by id
+export const getProfileByID= userId => dispatch =>{
+
+    axios.get(`/api/profile/${userId}`)
+        .then(res=>{
+            dispatch({
+                type:GET_PROFILE,
+                payload:res.data
+            })
+        })
+        .catch(err=>{
+            dispatch({
+                type:PROFILE_ERROR,
+                payload: {msg:err.response.statusText,error:err.response.status}
+            })
+        })
+};
+
+//get github repos
+export const getGithubRepos = (username) => dispatch =>{
+
+
+    axios.get(`/api/profile/github/${username}`)
+        .then(res=>{
+            dispatch({
+                type:GET_REPOS,
+                payload:res.data
+            })
+        })
+        .catch(err=>{
+            dispatch({
+                type:PROFILE_ERROR,
+                payload: {msg:err.response.statusText,error:err.response.status}
+            })
+        })
 };
 
 //update a profile
